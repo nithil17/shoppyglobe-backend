@@ -8,7 +8,7 @@ const Product = require("../models/Product");
 const authMiddleware = require("../middleware/authMiddleware");
 
 // GET /cart
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware , async (req, res) => {
     try {
         const cartItems = await Cart.find();
 
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
 });
 
 // POST /cart
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
     try {
 
         const { productId, quantity } = req.body;
@@ -58,7 +58,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT /cart/:id
-router.put("/:id", async (req, res) => {
+router.put("/:id", authMiddleware ,  async (req, res) => {
     try {
 
         const { quantity } = req.body;
