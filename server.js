@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 });
 
 // Routes
+app.use("/", userRoutes);
 app.use("/products", productRoutes);
 app.use("/cart", cartRoutes);
 
