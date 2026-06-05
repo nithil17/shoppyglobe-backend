@@ -5,6 +5,7 @@ const Cart = require("../models/Cart");
 console.log("Cart =", Cart);
 console.log("Cart.find =", Cart.find);
 const Product = require("../models/Product");
+const authMiddleware = require("../middleware/authMiddleware");
 
 // GET /cart
 router.get("/", async (req, res) => {
