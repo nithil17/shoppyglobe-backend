@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const cartSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     productId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
@@ -8,9 +13,12 @@ const cartSchema = new mongoose.Schema({
     },
     quantity: {
         type: Number,
-        required: true
+        required: true,
+        min: 1
     }
 });
+
+cartSchema.index({ userId: 1, productId: 1 }, { unique: true });
 
 const Cart = mongoose.model("Cart", cartSchema);
 

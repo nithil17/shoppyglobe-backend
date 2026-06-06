@@ -1,202 +1,196 @@
 # ShoppyGlobe Backend API
 
-## Project Overview
+ShoppyGlobe Backend is a RESTful API built with Node.js, Express.js, MongoDB, Mongoose, and JWT authentication. It provides product management, cart management, and user authentication for an e-commerce application.
 
-ShoppyGlobe Backend is a RESTful API built using **Node.js**, **Express.js**, and **MongoDB**. It provides product management, cart management, and user authentication functionalities for an e-commerce application.
-
-The project demonstrates CRUD operations, MongoDB integration, JWT-based authentication, and route protection using middleware.
-
----
+The project demonstrates MongoDB CRUD operations, JWT-based authentication, protected routes, validation, and API testing with Thunder Client.
 
 ## Features
 
-* View all products
-* View product details by ID
-* Add products to cart
-* Update cart quantity
-* Remove products from cart
-* User registration
-* User login
-* JWT token generation
-* Protected cart routes using authentication middleware
-* MongoDB database integration
-* API testing using Thunder Client
-
----
+- View all products
+- View product details by ID
+- Create, update, and delete products
+- Add products to the logged-in user's cart
+- Update cart item quantity
+- Remove products from cart
+- User registration and login
+- JWT token generation
+- Protected cart routes
+- MongoDB database integration
+- API testing using Thunder Client
 
 ## Tech Stack
 
-* Node.js
-* Express.js
-* MongoDB
-* Mongoose
-* JSON Web Token (JWT)
-* Thunder Client
-
----
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JSON Web Token (JWT)
+- Thunder Client
 
 ## Project Structure
 
-```
+```text
 shoppyglobe-backend/
-│
-├── config/
-│   └── db.js
-│
-├── middleware/
-│   └── authMiddleware.js
-│
-├── models/
-│   ├── Product.js
-│   ├── Cart.js
-│   └── User.js
-│
-├── routes/
-│   ├── productRoutes.js
-│   ├── cartRoutes.js
-│   └── userRoutes.js
-│
-├── .env
-├── package.json
-├── server.js
-└── README.md
+|-- config/
+|   `-- db.js
+|-- middleware/
+|   `-- authMiddleware.js
+|-- models/
+|   |-- Product.js
+|   |-- Cart.js
+|   `-- User.js
+|-- routes/
+|   |-- productRoutes.js
+|   |-- cartRoutes.js
+|   `-- userRoutes.js
+|-- .env
+|-- package.json
+|-- server.js
+`-- README.md
 ```
-
----
 
 ## Installation
 
-### Clone Repository
+Clone the repository:
 
 ```bash
 git clone <repository-url>
 ```
 
-### Navigate to Project
+Navigate to the project:
 
 ```bash
 cd shoppyglobe-backend
 ```
 
-### Install Dependencies
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-### Create Environment File
+Create a `.env` file in the project root:
 
-Create a `.env` file in the project root.
-
-Example:
-
-```
+```env
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
+JWT_SECRET=your_jwt_secret
 ```
 
-### Start Development Server
+Start the server:
+
+```bash
+npm start
+```
+
+For development:
 
 ```bash
 npm run dev
 ```
 
-Server will run on:
+The server runs at:
 
-```
+```text
 http://localhost:5000
 ```
 
----
-
-## API Endpoints
-
-### Product APIs
-
-| Method | Endpoint      | Description       |
-| ------ | ------------- | ----------------- |
-| GET    | /products     | Get all products  |
-| GET    | /products/:id | Get product by ID |
-
----
-
-### Cart APIs (Protected)
-
-| Method | Endpoint  | Description              |
-| ------ | --------- | ------------------------ |
-| GET    | /cart     | Get cart items           |
-| POST   | /cart     | Add product to cart      |
-| PUT    | /cart/:id | Update cart quantity     |
-| DELETE | /cart/:id | Remove product from cart |
-
----
-
-### User APIs
-
-| Method | Endpoint  | Description                       |
-| ------ | --------- | --------------------------------- |
-| POST   | /register | Register new user                 |
-| POST   | /login    | Login user and generate JWT token |
-
----
-
 ## Authentication
 
-Protected routes require a JWT token.
+Protected cart routes require this header:
 
-Add the following header:
-
-```
-Authorization: Bearer <your_jwt_token>
+```http
+Authorization: Bearer <jwt_token>
 ```
 
-If no token is provided, the API returns:
+Missing or invalid tokens return `401 Unauthorized`.
 
-```
-401 Unauthorized
+## User Routes
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| POST | `/register` | Register a new user |
+| POST | `/login` | Login and receive a JWT token |
+
+## Product Routes
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/products` | Fetch all products |
+| GET | `/products/:id` | Fetch a product by ID |
+| POST | `/products` | Create a product |
+| PUT | `/products/:id` | Update a product |
+| DELETE | `/products/:id` | Delete a product |
+
+Product request body:
+
+```json
+{
+  "name": "Product name",
+  "price": 999,
+  "description": "Product description",
+  "stockQuantity": 10
+}
 ```
 
----
+## Cart Routes
+
+All cart routes are protected and scoped to the logged-in user.
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/cart` | Fetch the logged-in user's cart |
+| POST | `/cart` | Add or update a product in the logged-in user's cart |
+| PUT | `/cart/:id` | Update cart item quantity |
+| DELETE | `/cart/:id` | Remove a cart item |
+
+Cart item request body:
+
+```json
+{
+  "productId": "PRODUCT_OBJECT_ID",
+  "quantity": 1
+}
+```
+
+## Validation And Error Handling
+
+The API validates required fields, MongoDB ObjectIds, product existence, positive cart quantities, and stock availability.
+
+Common responses:
+
+| Status | Meaning |
+| --- | --- |
+| 400 | Invalid request data |
+| 401 | Missing or invalid JWT token |
+| 404 | Resource not found |
+| 500 | Server error |
+
+## Database Collections
+
+- Products
+- Cart
+- Users
 
 ## Testing
 
-All APIs were tested using Thunder Client.
+All APIs should be tested using Thunder Client:
 
-The project includes testing for:
+- Product CRUD APIs
+- Cart CRUD APIs
+- User registration
+- User login
+- JWT protected routes
 
-* Product APIs
-* Cart CRUD APIs
-* User Registration
-* User Login
-* JWT Protected Routes
-
----
-
-## Database
-
-MongoDB Collections:
-
-* Products
-* Cart
-* Users
-
----
+Include screenshots for MongoDB product/cart collections and protected route behavior in the submitted repository documentation.
 
 ## Learning Outcomes
 
-This project demonstrates:
-
-* REST API development
-* Express routing
-* MongoDB CRUD operations
-* Mongoose models
-* JWT authentication
-* Middleware implementation
-* Error handling
-* API testing using Thunder Client
-
----
-
-
-Node.js | Express.js | MongoDB Backend Project
+- REST API development
+- Express routing
+- MongoDB CRUD operations
+- Mongoose models
+- JWT authentication
+- Middleware implementation
+- Error handling and validation
+- API testing using Thunder Client
